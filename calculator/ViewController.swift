@@ -17,16 +17,35 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     @IBOutlet weak var perPersonCostLabel: UILabel!
     @IBOutlet weak var tipSlider: UISlider!
     @IBOutlet weak var pickerView: UIPickerView!
-    
+    @IBOutlet weak var salesTaxLabel: UILabel!
+    var numOfPeople = 1
+    var tax = 0.06
     var pickOption = ["1", "2", "3", "4", "5", "6", "7", "8", "9","10"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         //var pickerView = UIPickerView()
-        
-           pickerView.delegate = self
-        
+        billField.becomeFirstResponder()
+        pickerView.delegate = self
+        tipLabel.text = String(format: "$%.2f", 0)
+        totalLabel.text = String(format: "$%.2f", 0)
+        tipSlider.value = 0.15
+        salesTaxLabel.text = String(format: "%.0f", 100 * tax)
+        tipPercentageLabel.text = String(format: "%.1f", 100 * tipSlider.value)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        print("view will appear")
+        let defaults = UserDefaults()
+        billField.becomeFirstResponder()
+        pickerView.delegate = self
+        tipSlider.value = defaults.float(forKey: "tip")
+        tax = Double(defaults.float(forKey: "tip"))
+        salesTaxLabel.text = String(format: "%.0f", 100 * defaults.float(forKey: "tax"))
+        tipPercentageLabel.text = String(format: "%.1f %", tipSlider.value * 100)
+        defaults.synchronize()
     }
 
     @IBAction func onTap(_ sender: Any) {
@@ -35,18 +54,20 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     @IBAction func calculateTip(_ sender: Any) {
         // Get the bill now
         let bill = Double(billField.text!) ?? 0
-        
-        
+        let defaults = UserDefaults()
+        let defaultTax = defaults.float(forKey: "tax")
+        tax = Double(defaultTax)
         // Calculate tip & total
         let tip = bill * Double(tipSlider.value)
-        let total = tip + bill
+        let total = tip + bill * (1+tax)
         
         // update corresponding labels
         tipLabel.text = String(format: "$%.2f", tip)
         totalLabel.text = String(format: "$%.2f", total)
-        tipPercentageLabel.text = String(format: "%.1f", tipSlider.value * 100)
-        
-    }
+        tipPercentageLabel.text = String(format: "%.1f %", tipSlider.value * 100)
+        defaults.synchronize()
+        self.pickerView(pickerView, didSelectRow: numOfPeople - 1, inComponent: 1)    }
+    
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
         return 1
        }
@@ -67,14 +88,15 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         
         // Calculate tip & total
         let tip = bill * Double(tipSlider.value)
-        let total = tip + bill
+        let total = tip + bill * (1+tax)
+        numOfPeople = Int(pickOption[row]) ?? 1
         
-        let numberOfPeople = Int(pickOption[row]) ?? 1
-        
-        let perPersonCost = total / Double(numberOfPeople)
+        let perPersonCost = total / Double(numOfPeople)
         
         //update label
+        if numOfPeople > 1 {
         perPersonCostLabel.text = String(format: "$%.2f per person", perPersonCost)
+        }
     }
 }
 
