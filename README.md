@@ -35,7 +35,9 @@ GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+Describe any challenges encountered while building the app:
+
+The main challenge was navigating around Xcode with all of its menus and windows.  I was able to read and find references online through stackoverflow and Apple's own documentation.  There were a few idiosyncrasies with Swift that I needed to debug. UserDefaults and deciding when labels changed or kept their values turned out to be more work than I originally estimated.
 
 ## License
 
