@@ -29,7 +29,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<blockquote class="imgur-embed-pub" lang="en" data-id="a/EpLlsDw" data-context="false"><a href="//imgur.com/a/EpLlsDw"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+<img src="https://imgur.com/jsEYKbY.gif"/>
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
